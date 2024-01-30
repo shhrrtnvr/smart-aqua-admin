@@ -17,8 +17,8 @@ const Home = () => {
 
   return (
     <div>
-      <h1>Welcome to My App</h1>
-      <p>This is the landing page of my application.</p>
+      <h1>Welcome to Smart Aquaculture Admin Dashboard</h1>
+      <p>This is the landing page of our application.</p>
     </div>
   );
 };

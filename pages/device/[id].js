@@ -8,10 +8,21 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-  Box, TextField
+  Box, TextField, Grid
 } from '@mui/material';
 import { Modal } from '@mui/material';
+import {Line} from "react-chartjs-2";
+import { Chart,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement
+} from 'chart.js';
 
+Chart.register(CategoryScale);
+Chart.register(LinearScale);
+Chart.register(PointElement);
+Chart.register(LineElement);
 
 const Device = () => {
   const router = useRouter();
@@ -23,6 +34,7 @@ const Device = () => {
   const [editedLocationAddress, setEditedLocationAddress] = useState(''); // State for edited location address
   const [editedLatitude, setEditedLatitude] = useState(''); // State for edited latitude
   const [editedLongitude, setEditedLongitude] = useState(''); // State for edited longitude
+  const [deviceData, setDeviceData] = useState([]);
 
 
   const handleOpenEditModal = () => {
@@ -105,6 +117,26 @@ const Device = () => {
     }
   }, [id]);
 
+  useEffect(() => {
+    if (id) {
+      const fetchDeviceData = async () => {
+        const response = await fetch(`http://139.59.54.184:8080/device/${id}/data/range/WEEK`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setDeviceData(data);
+        } else {
+          console.error('Error fetching device data:', response.statusText);
+        }
+      };
+
+      fetchDeviceData();
+    }
+  }, [id]);
+
   const handleDelete = () => {
     setOpen(true); // Open the confirmation modal
   };
@@ -136,6 +168,19 @@ const Device = () => {
   if (!device) {
     return <div>Loading...</div>;
   }
+
+  const fieldNames = ['dissolvedOxygen', 'ph', 'waterTemperature', 'airTemperature', 'humidity', 'solarRadiation', 'solarEnergy', 'uvIndex'];
+
+function getDayName(data, index) {
+  const currentDayName = new Date(data.timestamp).toLocaleDateString('en-US', { weekday: 'long' });
+  if (index > 0) {
+    const previousDayName = new Date(deviceData[index - 1].timestamp).toLocaleDateString('en-US', { weekday: 'long' });
+    if (currentDayName === previousDayName) {
+      return '';
+    }
+  }
+  return currentDayName;
+}
 
   return (
     <div>
@@ -191,6 +236,43 @@ const Device = () => {
           </Button>
         </Box>
       </Modal>
+
+      <Typography variant="h6" color="primary">
+        Device Data
+      </Typography>
+
+      <Grid container spacing={2}>
+        {fieldNames.map((field, index) => (
+          <Grid item xs={6} key={index}>
+            <Typography variant="h6">{field}</Typography>
+            <Line
+              data={{
+                labels: deviceData.map((data, index) => getDayName(data, index)),
+                datasets: [
+                  {
+                    label: field,
+                    data: deviceData.map((data) => data[field]),
+                    fill: false,
+                    backgroundColor: `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`,
+                    borderColor: `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.2)`,
+                  },
+                ],
+              }}
+              options={{
+                scales: {
+                  y: {
+                    ticks: {
+                      callback: function(value, index, values) {
+                        return value.toFixed(2);
+                      }
+                    }
+                  }
+                }
+              }}
+            />
+          </Grid>
+        ))}
+      </Grid>
 
       <Button variant="contained" color="secondary" onClick={handleDelete}>
         Delete

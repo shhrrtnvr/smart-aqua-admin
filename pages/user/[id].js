@@ -45,7 +45,7 @@ const User = () => {
 
   const handleConfirmAddDevice = async () => {
   try {
-    const response = await fetch(`https://139.59.54.184:443/device/add/${user.id}`, {
+    const response = await fetch(`http://139.59.54.184:8080/device/add/${user.id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ const User = () => {
       console.log('Device added successfully');
       handleCancelAddDevice();
       // Fetch the updated list of devices
-      const userResponse = await fetch(`https://139.59.54.184:443/user/info/${id}`, {
+      const userResponse = await fetch(`http://139.59.54.184:8080/user/info/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
@@ -92,7 +92,7 @@ const User = () => {
   useEffect(() => {
     if (id) {
       const fetchUser = async () => {
-        const response = await fetch(`https://139.59.54.184:443/user/info/${id}`, {
+        const response = await fetch(`http://139.59.54.184:8080/user/info/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           },
@@ -113,7 +113,7 @@ const User = () => {
   if (editMode) {
     // If already in edit mode, call the update API
     try {
-      const response = await fetch(`https://139.59.54.184:443/auth/info`, {
+      const response = await fetch(`http://139.59.54.184:8080/auth/info`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -131,7 +131,7 @@ const User = () => {
         // User updated successfully
         console.log('User updated successfully');
         // Fetch the updated user details
-        const userResponse = await fetch(`https://139.59.54.184:443/user/info/${id}`, {
+        const userResponse = await fetch(`http://139.59.54.184:8080/user/info/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           },
@@ -163,7 +163,7 @@ const handleDelete = (id) => {
 
 const handleConfirmDelete = async () => {
   try {
-    const response = await fetch(`https://139.59.54.184:443/user/delete/${deleteUserId}`, {
+    const response = await fetch(`http://139.59.54.184:8080/user/delete/${deleteUserId}`, {
       method: 'POST', // Change this to POST
       headers: {
         'Content-Type': 'application/json',
@@ -175,7 +175,7 @@ const handleConfirmDelete = async () => {
       // User deleted successfully
       console.log('User deleted successfully');
       // Fetch the updated list of users
-      const userListResponse = await fetch('https://139.59.54.184:443/user/list', {
+      const userListResponse = await fetch('http://139.59.54.184:8080/user/list', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
         },

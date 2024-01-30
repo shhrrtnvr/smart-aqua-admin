@@ -56,7 +56,7 @@ const Device = () => {
 
   const handleConfirmEditModal = async () => {
     try {
-      const response = await fetch('https://139.59.54.184:443/device/update', {
+      const response = await fetch('http://139.59.54.184:8080/device/update', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ const Device = () => {
         console.log('Device updated successfully');
         handleCancelEditModal();
         // Fetch the updated device info
-        const deviceResponse = await fetch(`https://139.59.54.184:443/device/${id}`, {
+        const deviceResponse = await fetch(`http://139.59.54.184:8080/device/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           },
@@ -100,7 +100,7 @@ const Device = () => {
   useEffect(() => {
     if (id) {
       const fetchDevice = async () => {
-        const response = await fetch(`https://139.59.54.184:443/device/${id}`, {
+        const response = await fetch(`http://139.59.54.184:8080/device/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           },
@@ -120,7 +120,7 @@ const Device = () => {
   useEffect(() => {
     if (id) {
       const fetchDeviceData = async () => {
-        const response = await fetch(`https://139.59.54.184:443/device/${id}/data/range/WEEK`, {
+        const response = await fetch(`http://139.59.54.184:8080/device/${id}/data/range/WEEK`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           },
@@ -143,7 +143,7 @@ const Device = () => {
 
   const handleConfirmDelete = async () => {
     try {
-      const response = await fetch(`https://139.59.54.184:443/device/delete/${id}`, {
+      const response = await fetch(`http://139.59.54.184:8080/device/delete/${id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

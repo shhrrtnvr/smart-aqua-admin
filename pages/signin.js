@@ -60,7 +60,7 @@ const Signin = () => {
 
   const handleSignin = async () => {
     try {
-      const response = await fetch('http://139.59.54.184:8080/auth/login', {
+      const response = await fetch('/api/proxy', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

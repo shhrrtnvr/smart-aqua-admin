@@ -56,11 +56,11 @@ const Device = () => {
 
   const handleConfirmEditModal = async () => {
     try {
-      const response = await fetch('http://139.59.54.184:8080/device/update', {
+      const response = await fetch(`/api/updateDevice`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
         },
         body: JSON.stringify({
           id: device.id, // Include the device id in the request body
@@ -76,9 +76,9 @@ const Device = () => {
         console.log('Device updated successfully');
         handleCancelEditModal();
         // Fetch the updated device info
-        const deviceResponse = await fetch(`http://139.59.54.184:8080/device/${id}`, {
+        const deviceResponse = await fetch(`/api/deviceInfo?id=${id}`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
           },
         });
         if (deviceResponse.ok) {
@@ -96,11 +96,10 @@ const Device = () => {
     }
   };
 
-
   useEffect(() => {
     if (id) {
       const fetchDevice = async () => {
-        const response = await fetch(`http://139.59.54.184:8080/device/${id}`, {
+        const response = await fetch(`/api/deviceInfo?id=${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           },
@@ -120,7 +119,7 @@ const Device = () => {
   useEffect(() => {
     if (id) {
       const fetchDeviceData = async () => {
-        const response = await fetch(`http://139.59.54.184:8080/device/${id}/data/range/WEEK`, {
+        const response = await fetch(`/api/deviceData?id=${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
           },
@@ -143,11 +142,11 @@ const Device = () => {
 
   const handleConfirmDelete = async () => {
     try {
-      const response = await fetch(`http://139.59.54.184:8080/device/delete/${id}`, {
+      const response = await fetch(`/api/deleteDevice?id=${id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
         },
       });
 
@@ -171,16 +170,16 @@ const Device = () => {
 
   const fieldNames = ['dissolvedOxygen', 'ph', 'waterTemperature', 'airTemperature', 'humidity', 'solarRadiation', 'solarEnergy', 'uvIndex'];
 
-function getDayName(data, index) {
-  const currentDayName = new Date(data.timestamp).toLocaleDateString('en-US', { weekday: 'long' });
-  if (index > 0) {
-    const previousDayName = new Date(deviceData[index - 1].timestamp).toLocaleDateString('en-US', { weekday: 'long' });
-    if (currentDayName === previousDayName) {
-      return '';
+  function getDayName(data, index) {
+    const currentDayName = new Date(data.timestamp).toLocaleDateString('en-US', { weekday: 'long' });
+    if (index > 0) {
+      const previousDayName = new Date(deviceData[index - 1].timestamp).toLocaleDateString('en-US', { weekday: 'long' });
+      if (currentDayName === previousDayName) {
+        return '';
+      }
     }
+    return currentDayName;
   }
-  return currentDayName;
-}
 
   return (
     <div>

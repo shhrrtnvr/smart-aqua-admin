@@ -85,9 +85,10 @@ const Home = () => {
   }
 
   useEffect(() => {
+
     const fetchUserList = async () => {
       try {
-        const response = await fetch('http://139.59.54.184:8080/user/list', {
+        const response = await fetch('/api/userList', {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -121,7 +122,7 @@ const Home = () => {
 
 const handleCreateUser = async () => {
   try {
-    const response = await fetch('http://139.59.54.184:8080/user/add', {
+    const response = await fetch('/api/addUser', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -140,7 +141,7 @@ const handleCreateUser = async () => {
       console.log('User created successfully');
       handleClose();
       // Fetch the updated list of users
-      const userListResponse = await fetch('http://139.59.54.184:8080/user/list', {
+      const userListResponse = await fetch('/api/userList', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
         },

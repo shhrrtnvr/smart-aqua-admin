@@ -1,10 +1,10 @@
-// pages/api/proxy.js
+// pages/api/updateUser.js
 export default async function handler(req, res) {
-  const response = await fetch('http://139.59.54.184:8080/auth/login', {
-    method: req.method,
+  const response = await fetch(`${process.env.API_URL}/auth/info`, {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      // Forward any other headers you need
+      'Authorization': `Bearer ${req.headers.authorization}`,
     },
     body: JSON.stringify(req.body),
   });

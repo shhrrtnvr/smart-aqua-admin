@@ -60,7 +60,7 @@ const Signin = () => {
 
   const handleSignin = async () => {
     try {
-      const response = await fetch('/api/proxy', {
+      const response = await fetch('/api/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
